@@ -1,7 +1,7 @@
-# TouchPortal_StreamRaiders_Plugin
+# TouchPortal StreamRaiders Plugin
 Plugin for Touch Portal to interact with Stream Raiders
 
-- [TouchPortal_StreamRaiders_Plugin](#touchportal_streamraiders_plugin)
+- [TouchPortal StreamRaiders Plugin](#touchportal-streamraiders-plugin)
 - [WORK IN PROGRESS](#work-in-progress)
 - [Notice](#notice)
 
