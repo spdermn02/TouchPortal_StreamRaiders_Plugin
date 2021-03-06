@@ -1,0 +1,26 @@
+{
+  "name": "touchportal_streamraiders",
+  "version": "1.0.0",
+  "description": "Touch Portal and Stream Raiders control",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "pkg": "pkg .",
+    "pkg-win": "pkg --targets node12-win-x64 .",
+    "pkg-mac": "pkg --targets node12-macos-x64 .",
+    "build-win": "pkg --targets node12-win-x64 . && move TouchPortal_StreamRaiders.exe base/Win/TPStreamRaiders/ && del Installers\\TPStreamRaiders-Win.tpp && cd base\\Win && 7z a -tzip ../../Installers/TPStreamRaiders-Win.tpp TPStreamRaiders",
+    "build-mac": "pkg --targets node12-macos-x64 . && move TouchPortal_StreamRaiders base/Mac/TPStreamRaiders/ && del Installers\\TPStreamRaiders-Mac.tpp && cd base\\Mac && 7z a -tzip ../../Installers/TPStreamRaiders-Mac.tpp TPStreamRaiders"
+  },
+  "keywords": [
+    "TouchPortal",
+    "StreamRaiders"
+  ],
+  "author": "Jameson Allen aka Spdermn02",
+  "license": "MIT",
+  "dependencies": {
+    "atob": "^2.1.2",
+    "btoa": "^1.2.1",
+    "touchportal-api": "^2.0.0-alpha",
+    "websocket": "^1.0.33"
+  }
+}
