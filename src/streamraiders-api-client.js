@@ -7,10 +7,11 @@ const atob = require("atob");
 const SOCKET_IP = '127.0.0.1';
 const SOCKET_PORT = 10042;
 
+const LOOP_INTERVAL = 10000;
+
 class StreamRaidersClient extends EventEmitter {
     constructor(options = {}) {
         super();
-        console.log("We are here");
         this.websocket = new WebSocketClient();
         this.connection = null;
     }
@@ -30,16 +31,27 @@ class StreamRaidersClient extends EventEmitter {
                 that.emit("message",atob(message.utf8Data));
             }
           });
+
+          that.sendMessage("getinfo");
+          that.loopGetState();
         });
         this.websocket.connect(`ws://${SOCKET_IP}:${SOCKET_PORT}`);
     }
     sendMessage( message ) {
-      console.log("sending message ", message);
       this.connection.sendUTF(btoa(message));
-      console.log("done message ", message);
     }
     switchAccounts() {
       this.sendMessage("switchaccounts");
+    }
+    loopGetState() {
+      let that = this;
+      this.loop = setInterval(function() { 
+        that.getState();
+      }, LOOP_INTERVAL);
+      this.getState();
+    }
+    getState() {
+      this.sendMessage('getstate');
     }
 }
 
