@@ -12,19 +12,25 @@ const LOOP_INTERVAL = 10000;
 class StreamRaidersClient extends EventEmitter {
     constructor(options = {}) {
         super();
-        this.websocket = new WebSocketClient();
+        this.websocket = null;
         this.connection = null;
+        this.loop = null;
     }
     connect(options = {}) {
         let that = this;
+        this.websocket = new WebSocketClient();
         this.websocket.on("connect",(connection) => {
           that.connection = connection;
           that.emit("connected");
           that.connection.on('close',() => {
-            that.emit("closed");
+            that.emit("close");
+            if( that.loop !== null ) { clearInterval(that.loop);}
+            that.loop = null;
           });
           that.connection.on('error',(message) => {
             that.emit("error",message);
+            if( that.loop !== null ) { clearInterval(that.loop);}
+            that.loop = null;
           });
           that.connection.on('message',(message) => {
             if( message.type == 'utf8' ) {
@@ -39,9 +45,6 @@ class StreamRaidersClient extends EventEmitter {
     }
     sendMessage( message ) {
       this.connection.sendUTF(btoa(message));
-    }
-    switchAccounts() {
-      this.sendMessage("switchaccounts");
     }
     loopGetState() {
       let that = this;

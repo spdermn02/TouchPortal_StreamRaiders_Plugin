@@ -15,14 +15,11 @@ This plugin is NOT developed by Stream Captain and is not affiliated with them i
 ```
 1.0.0 - Initial Release
   Settings:
-    - Battle Timer Type
-      Description: How should the plugin return the Time left for Battle
-      Valid Values: Minutes Only, Seconds Only, Minutes and Seconds
-      Default: Minutes Only
+    - None Currently
   Actions:
     - Start Battle
     - Toggle Music/SFX Audio
-    - Set/Increase/Decrease Music/SFX volume by or to a specified value
+    - Increase/Decrease Music/SFX volume by or to a specified value
     - Switch between Account Types - Captain or Viewer
   States:
     - Account Type

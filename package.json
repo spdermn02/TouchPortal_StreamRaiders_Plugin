@@ -20,7 +20,9 @@
   "license": "MIT",
   "dependencies": {
     "atob": "^2.1.2",
+    "axios": "^0.21.1",
     "btoa": "^1.2.1",
+    "qs": "^6.9.6",
     "touchportal-api": "^2.0.0-alpha",
     "websocket": "^1.0.33"
   }

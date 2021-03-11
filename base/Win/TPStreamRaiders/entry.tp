@@ -9,18 +9,7 @@
         "colorDark": "#023B2F",
         "colorLight": "#126352"
     },
-    "settings": [
-        {
-            "name": "Battle Timer Type",
-            "type": "choice",
-            "default": "",
-            "valueChoices":[
-              "Minutes Only",
-              "Seconds Only",
-              "Minutes and Seconds"
-            ]
-        }
-    ],
+    "settings": [ ],
     "categories": [
         {
             "id": "TouchPortalStreamRaiders",
@@ -102,16 +91,15 @@
                    "name":"Audio Volume",
                    "type":"communicate",
                    "tryInline":"true",
-                   "format":"Stream Raiders: {$streamraiders_volume_control$} {$streamraiders_volume_type$} volume by or to {$streamraiders_volume_value$}",
+                   "format":"Stream Raiders: {$streamraiders_volume_control$} {$streamraiders_volume_type$} volume by {$streamraiders_volume_value$}",
                    "hasHoldFunctionality": true,
                    "data" :[
                        {
                            "id":"streamraiders_volume_control",
                            "type": "choice",
                            "label":  "Change Volume",
-                           "default": "Set",
+                           "default": "Increase",
                            "valueChoices":[
-                               "Set",
                                "Increase",
                                "Decrease"
                            ]
@@ -161,17 +149,23 @@
                     ]
                 },
                 {
-                    "id": "streamraiders_battle_timer",
+                    "id": "streamraiders_battle_timer_minutes",
                     "type": "text",
-                    "desc": "Stream Raiders Battle Timer",
+                    "desc": "Stream Raiders Battle Timer Minutes",
                     "default": "0"
                 },
                 {
-                    "id": "streamraiders_battle_timer_image",
+                    "id": "streamraiders_battle_timer_seconds",
                     "type": "text",
-                    "desc": "Stream Raiders Battle Timer Image",
-                    "default": ""
+                    "desc": "Stream Raiders Battle Timer Seconds",
+                    "default": "0"
                 },
+                {
+                    "id": "streamraiders_placement_timeLeft",
+                    "type": "text",
+                    "desc": "Stream Raiders Battle Placement Time Left in Seconds",
+                    "default": "0"
+                }
                 {
                     "id": "streamraiders_unit_count",
                     "type": "text",
@@ -197,6 +191,18 @@
                         "On",
                         "Off"
                     ]
+                },
+                {
+                    "id": "streamraiders_music_audio_volume",
+                    "type": "text",
+                    "desc": "Stream Raiders Music Volume",
+                    "default": "0"
+                },
+                {
+                    "id": "streamraiders_sfx_audio_volume",
+                    "type": "text",
+                    "desc": "Stream Raiders SFX Volume",
+                    "default": "0"
                 }
             ],
             "events": []
