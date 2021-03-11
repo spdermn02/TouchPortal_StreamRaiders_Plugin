@@ -165,7 +165,7 @@
                     "type": "text",
                     "desc": "Stream Raiders Battle Placement Time Left in Seconds",
                     "default": "0"
-                }
+                },
                 {
                     "id": "streamraiders_unit_count",
                     "type": "text",

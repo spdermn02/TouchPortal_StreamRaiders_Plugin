@@ -12,6 +12,12 @@
     "build-win": "pkg --targets node12-win-x64 . && move touchportal_streamraiders.exe base/Win/TPStreamRaiders/ && del Installers\\TPStreamRaiders-Win.tpp && cd base\\Win && 7z a -tzip ../../Installers/TPStreamRaiders-Win.tpp TPStreamRaiders",
     "build-mac": "pkg --targets node12-macos-x64 . && move touchportal_streamraiders base/Mac/TPStreamRaiders/ && del Installers\\TPStreamRaiders-Mac.tpp && cd base\\Mac && 7z a -tzip ../../Installers/TPStreamRaiders-Mac.tpp TPStreamRaiders"
   },
+  "pkg": {
+    "scripts": [
+      "src/**/*.js",
+      "src/actions/**/*.js"
+    ]
+  },
   "keywords": [
     "TouchPortal",
     "StreamRaiders"

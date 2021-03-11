@@ -27,11 +27,13 @@ This plugin is NOT developed by Stream Captain and is not affiliated with them i
       Valid Values: Captain, Viewer
     - Battle State
       Description: Current state of your current Stream Raiders Battle
-      Valid Values: PlacementPeriod, PlacementPeriodEnding, WaitingForCaptainToStart, BattleStarted
-    - Battle Timer
-      Description: Numeric representation of Battle Timer
-    - Battle Timer Image
-      Description: Visual Icon representation of Battle Timer
+      Valid Values: Waiting for New Raid, Unit On Cooldown, Unit Available, Unit Placement Period, Unit Placement Ending, Waiting for Captain to Start, Battle Started, Battle Rewards, Battle Ended
+    - Battle Timer Minutes
+      Description: Numeric representation of Battle Timer Minutes
+    - Battle Timer Seconds
+      Description: Numeric representation of Battle Timer Seconds
+    - Battle Time Left
+      Description: Numeric representation of Battle Placement Time Left in Seconds
     - Unit Count
       Description: Numeric representation of Unit Count
     - Music Audio Status

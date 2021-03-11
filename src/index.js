@@ -25,13 +25,19 @@ const battleStates =  {
     battleEnded: 9,
     unknown: 10
 }
-const battleStateArray = [];
-for (const [key, value] of Object.entries(battleStates)) {
-    battleStateArray[value] = key;
-}
-
-console.log(JSON.stringify(battleStateArray));
-
+const battleStateArray = [
+    'Empty',
+    'Waiting for New Raid',
+    'Unit On Cooldown',
+    'Unit Available',
+    'Unit Placement Period',
+    'Unit Placement Ending',
+    'Waiting for Captain to Start',
+    'Battle Started',
+    'Battle Rewards',
+    'Battle Ended',
+    'UNKNOWN'
+];
 
 const settings = { };
 
@@ -100,26 +106,32 @@ const setState = (state, value ) => {
 let battleTimerLoop = null;
 SRServer.on("response",(data) => {
   // { raidState: 1, timeLeft: 0, placementCount: 1 } 
-  //   battleStaet    time,       unitsCount
+  //   battleState    time,       unitsCount
   setState('streamraiders_placement_timeleft',data.timeLeft);
   setState('streamraiders_unit_count',data.placementCount);
-  setState('streamraiders_battle_state',data.raidState);
+  setState('streamraiders_battle_state',battleStateArray[data.raidState]);
 
   // { raidState: 4, timeLeft: 1800, placementCount: 0 } 
+  //logIt("DEBUG",JSON.stringify(data));
+  if( data.raidState != battleStates.placementPeriod ){
+      resetTimer();
+  }
   if( parseInt(data.timeLeft) > 0 && battleTimerLoop == null ) {
-      logIt("DEBUG", "startBattleLoop");
+      logIt("INFO", "Start Battle Counter");
       // build battle timer to loop every second based off 
       let timerLoop = 1000;
       battleTimerLoop = setInterval(function() {
+        if( data.raidState != battleStates.placementPeriod) {
+           resetTimer();
+           return;
+        }
         let timeLeft = states.streamraiders_placement_timeleft.value;
         setState('streamraiders_placement_timeleft',timeLeft - timerLoop / 1000);
         calcTimer();
       }, timerLoop);
   }
   else if( ( parseInt(data.timeLeft) <= 0 || data.raidState !== battleStates.placementPeriod )&& battleTimerLoop !== null) {
-      logIt("DEBUG", "stop battle timer");
-      clearInterval(battleTimerLoop)
-      battleTimerLoop = null;
+      logIt("INFO", "Stop Battle counteR");
       resetTimer();
   }
 
@@ -136,6 +148,8 @@ calcTimer = () => {
 };
 
 resetTimer = () => {
+   clearInterval(battleTimerLoop)
+   battleTimerLoop = null;
    setState('streamraiders_battle_timer_seconds','00');
    setState('streamraiders_battle_timer_minutes','00');
 };
@@ -152,7 +166,6 @@ SRClient.on("connected", () => {
     setState('streamraiders_connected',true);
 });
 SRClient.on("message", (message) => {
-        logIt("DEBUG",message);
     const pieces = message.split("|");
     if( pieces[0] == 'switchaccounts' ) {
         actions.get('streamraiders_switch_accounts').updateState(pieces,states,setState);
@@ -179,7 +192,7 @@ SRClient.on("message", (message) => {
     }
     else if( pieces[0] === 'startbattle' ) {
         //"startbattle|success"
-        logIt("DEBUG",'startbattle',message);
+        logIt("INFO",'startbattle message:',message);
 
     }
 
@@ -204,11 +217,13 @@ SRClient.on("close", () => {
 
 // Touch Portal Client Setup
 TPClient.on("Settings", (data) => {
-  data.forEach( (setting) => {
-    let key = Object.keys(setting)[0];
-    settings[key] = setting[key];
-    //logIt("DEBUG","Settings: Setting received for |"+key+"|");
-  });
+  if( data ) {
+    data.forEach( (setting) => {
+      let key = Object.keys(setting)[0];
+      settings[key] = setting[key];
+      //logIt("DEBUG","Settings: Setting received for |"+key+"|");
+    });
+  }
 });
 
 TPClient.on("Info", (data) => {
