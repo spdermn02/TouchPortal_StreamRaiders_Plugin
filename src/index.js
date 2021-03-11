@@ -61,14 +61,13 @@ if( jsFiles.length <= 0 ) {
 else {
   jsFiles.forEach((jsFile) => {
     const action = require(path.join(__dirname,'/actions/')+jsFile);
-    logIt("DEBUG",`Action loaded ${action.name}`);
+    //logIt("DEBUG",`Action loaded ${action.name}`);
     actions.set(action.name,action);
     if( action.states !== undefined ) {
         states = {...states, ...action['states']};
     }
   });
 }
-
 
 const updateTouchPortalStates = () => {
     let statesToUpdate = [];
@@ -80,7 +79,7 @@ const updateTouchPortalStates = () => {
     }
 
     if( statesToUpdate.length > 0 ) {
-      logIt("DEBUG",JSON.stringify(statesToUpdate));
+      //logIt("DEBUG",JSON.stringify(statesToUpdate));
       TPClient.stateUpdateMany( statesToUpdate );
     }
 }
@@ -131,15 +130,16 @@ calcTimer = () => {
    let timeLeft = states.streamraiders_placement_timeleft.value;
    let minutes = Math.floor(timeLeft / 60);
    let seconds = Math.floor(timeLeft - minutes * 60);
-   setState('streamraiders_battle_timer_seconds',seconds);
-   setState('streamraiders_battle_timer_minutes',minutes);
+   setState('streamraiders_battle_timer_seconds',String(seconds).padStart(2,"0"));
+   setState('streamraiders_battle_timer_minutes',String(minutes).padStart(2,"0"));
    updateTouchPortalStates();
 };
 
 resetTimer = () => {
-   setState('streamraiders_battle_timer_seconds',0);
-   setState('streamraiders_battle_timer_minutes',0);
+   setState('streamraiders_battle_timer_seconds','00');
+   setState('streamraiders_battle_timer_minutes','00');
 };
+
 SRServer.on("error",(data) => {
     logIt("ERROR",data);
     SRServer.disconnect();
@@ -179,7 +179,7 @@ SRClient.on("message", (message) => {
     }
     else if( pieces[0] === 'startbattle' ) {
         //"startbattle|success"
-        logIt("DEBUG",message);
+        logIt("DEBUG",'startbattle',message);
 
     }
 
@@ -195,7 +195,7 @@ SRClient.on("close", () => {
     setState('streamraiders_connected',false);
     SRServer.disconnect();
     setTimeout(function() {
-        logIt("DEBUG", "Attempting Reconnect to Stream Raiders");
+        logIt('WARN', "Attempting Reconnect to Stream Raiders");
         SRClient.connect();
     }, 1000);
 });
@@ -207,18 +207,18 @@ TPClient.on("Settings", (data) => {
   data.forEach( (setting) => {
     let key = Object.keys(setting)[0];
     settings[key] = setting[key];
-    logIt("DEBUG","Settings: Setting received for |"+key+"|");
+    //logIt("DEBUG","Settings: Setting received for |"+key+"|");
   });
 });
 
 TPClient.on("Info", (data) => {
     //okay now validate from monitor of app if it's running, else just sit and wait for monitor to emite running event
-    logIt("DEBUG",JSON.stringify(data));
+    //logIt("DEBUG",JSON.stringify(data));
 
     //is Stream Raiders running
     //if not recheck ever so often and when it is fire the connection to the websocket
     setTimeout(function() {
-        logIt("DEBUG", "Initial Attempting Connect to Stream Raiders");
+        logIt("INFO", "Initial Attempting Connect to Stream Raiders");
         SRClient.connect();
     },1000);
 });
@@ -226,7 +226,7 @@ TPClient.on("Info", (data) => {
 TPClient.on("Action", (message) => {
     const action = message.actionId;
     if( actions.has(action) ) {
-        logIt("DEBUG",`calling action ${action}`);
+        logIt("INFO",`calling action ${action}`);
         let data = {};
         message.data.forEach((elm) => {
             data[elm.id] = elm.value;
