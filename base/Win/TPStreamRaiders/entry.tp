@@ -139,13 +139,17 @@
                     "id": "streamraiders_battle_state",
                     "type": "choice",
                     "desc": "Stream Raiders Battle State",
-                    "default": "No Battle",
+                    "default": "Waiting for New Raid",
                     "valueChoices": [
-                        "NoBattle",
-                        "PlacementPeriod",
-                        "PlacementPeriodEnding",
-                        "WaitingForCaptainToStart",
-                        "BattleStarted"
+                        "Waiting for New Raid",
+                        "Unit On Cooldown",
+                        "Unit Available",
+                        "Unit Placement Period",
+                        "Unit Placement Ending",
+                        "Waiting for Captain to Start",
+                        "Battle Started",
+                        "Battle Rewards",
+                        "Battle Ended"
                     ]
                 },
                 {
