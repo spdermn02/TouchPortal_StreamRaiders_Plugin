@@ -3,7 +3,6 @@
 const EventEmitter = require("events");
 const axios = require('axios');
 const qs = require('qs');
-const { url } = require("inspector");
 
 const LOOP_INTERVAL = 10000;
 const PORT = 443;
