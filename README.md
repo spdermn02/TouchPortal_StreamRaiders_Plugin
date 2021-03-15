@@ -89,7 +89,7 @@ Use the Github Issues tab to report any bugs/enhancements for this plug-in. Or m
 
 ## Acknowledgments
 
-- Thank you to [Niterfx](https://www.twitch.tv/niterfx_) for inquiring about the plugin possiblities and coordinating communication to the STream Captain team to make sure it was okay to build this plugin based on their Streamdeck plugin, and testing it!
-- Thank you to [Tempestwins](https://www.twitch.tv/tempestwins) for testing this as well
+- Thank you to [Niterfx](https://www.twitch.tv/niterfx_) for inquiring about the plugin possiblities and coordinating communication to the Stream Captain team to make sure it was okay to build this plugin based on their Streamdeck plugin, and testing it!
+- Thank you to [Tempestwins](https://www.twitch.tv/tempestwins) for testing
 - Thank you to the Stream Captain team for allowing the plugin to be developed
 - Thank you to Ty and Reinier for creating and developing Touch Portal
