@@ -43,6 +43,10 @@ class StreamRaidersClient extends EventEmitter {
         });
         this.websocket.connect(`ws://${SOCKET_IP}:${SOCKET_PORT}`);
     }
+    disconnect() {
+      clearInterval(this.loop);
+      this.loop = null;
+    }
     sendMessage( message ) {
       this.connection.sendUTF(btoa(message));
     }

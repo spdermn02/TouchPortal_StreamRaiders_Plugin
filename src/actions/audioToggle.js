@@ -1,7 +1,6 @@
 module.exports = {
     name: 'streamraiders_audio_toggle',
     run: (data, touchPortalClient, streamRaidersClient, streamRaidersServer ) => {
-        console.log(JSON.stringify(data));
       let message = null;
       switch(data.streamraiders_toggle_type) {
           case "Music":

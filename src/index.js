@@ -1,9 +1,12 @@
 const TP = require('touchportal-api');
 const fs = require('fs');
 const path = require('path');
+const ProcessWatcher = require(path.join(__dirname,"/process_watcher"));
+const platform = require('process').platform;
 const SRApiClient = require(path.join(__dirname,"/streamraiders-api-client"));
 const SRApiServer = require(path.join(__dirname,"/streamraiders-api-server"));
 
+let streamRaidersRunning = false;
 
 const app_monitor = {
   "darwin": "com.streamcaptain.streamraiders",
@@ -57,6 +60,7 @@ let actions = new Map();
 const TPClient = new TP.Client();
 const SRClient = new SRApiClient();
 const SRServer = new SRApiServer({states});
+const procWatcher = new ProcessWatcher();
 
 // Load Actions here
 const files = fs.readdirSync(path.join(__dirname,"/actions/"));
@@ -67,7 +71,6 @@ if( jsFiles.length <= 0 ) {
 else {
   jsFiles.forEach((jsFile) => {
     const action = require(path.join(__dirname,'/actions/')+jsFile);
-    //logIt("DEBUG",`Action loaded ${action.name}`);
     actions.set(action.name,action);
     if( action.states !== undefined ) {
         states = {...states, ...action['states']};
@@ -85,7 +88,6 @@ const updateTouchPortalStates = () => {
     }
 
     if( statesToUpdate.length > 0 ) {
-      //logIt("DEBUG",JSON.stringify(statesToUpdate));
       TPClient.stateUpdateMany( statesToUpdate );
     }
 }
@@ -112,7 +114,6 @@ SRServer.on("response",(data) => {
   setState('streamraiders_battle_state',battleStateArray[data.raidState]);
 
   // { raidState: 4, timeLeft: 1800, placementCount: 0 } 
-  //logIt("DEBUG",JSON.stringify(data));
   if( data.raidState != battleStates.placementPeriod ){
       resetTimer();
   }
@@ -204,16 +205,46 @@ SRClient.on("error", (message) => {
     SRServer.disconnect();
 });
 SRClient.on("close", () => {
+    if( runningConnection ) {
+        return;
+    }
     logIt('INFO',"Stream Raiders socket closing");
     setState('streamraiders_connected',false);
     SRServer.disconnect();
     setTimeout(function() {
         logIt('WARN', "Attempting Reconnect to Stream Raiders");
         SRClient.connect();
-    }, 1000);
+    }, 2000);
 });
 // End Stream Raiders
 
+// Process Watcher
+procWatcher.on('processRunning', (processName) => {
+    runningConnection = true;
+    streamRaidersRunning = true;
+    // Lets shutdown the connection so we can re-establish it
+    SRServer.disconnect();
+    SRClient.disconnect();
+    setTimeout(function() {
+        logIt('INFO', "Stream Raiders is running, attempting to Connect");
+        SRClient.connect();
+        runningConnection = false;
+    }, 5000);
+});
+procWatcher.on('processTerminated', (processName) => {
+    logIt('WARN',`${processName} not detected as running`);
+    if( !streamRaidersRunning ) {
+        // We already did this once, don't need to keep repeating it
+        return;
+    }
+    logIt('WARN',`Terminating active connections to Stream Raiders`);
+    streamRaidersRunning = false;
+    SRServer.disconnect();
+    SRClient.disconnect();
+    setState('streamraiders_connected',false);
+    updateTouchPortalStates();
+});
+// End Process Watcher
 
 // Touch Portal Client Setup
 TPClient.on("Settings", (data) => {
@@ -221,21 +252,15 @@ TPClient.on("Settings", (data) => {
     data.forEach( (setting) => {
       let key = Object.keys(setting)[0];
       settings[key] = setting[key];
-      //logIt("DEBUG","Settings: Setting received for |"+key+"|");
     });
   }
 });
 
 TPClient.on("Info", (data) => {
-    //okay now validate from monitor of app if it's running, else just sit and wait for monitor to emite running event
-    //logIt("DEBUG",JSON.stringify(data));
-
-    //is Stream Raiders running
-    //if not recheck ever so often and when it is fire the connection to the websocket
-    setTimeout(function() {
-        logIt("INFO", "Initial Attempting Connect to Stream Raiders");
-        SRClient.connect();
-    },1000);
+    //TP Is connected now
+    //Start Process Watcher for this platform
+    logIt('INFO',`Starting process watcher for ${app_monitor[platform]}`);
+    procWatcher.watch(app_monitor[platform]);
 });
 
 TPClient.on("Action", (message) => {
@@ -261,6 +286,4 @@ function logIt() {
 }
 
 TPClient.connect({pluginId})
-
 // End Touch Portal Client Settings
-

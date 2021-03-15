@@ -28,8 +28,9 @@
     "atob": "^2.1.2",
     "axios": "^0.21.1",
     "btoa": "^1.2.1",
+    "find-process": "^1.4.4",
     "qs": "^6.9.6",
-    "touchportal-api": "^2.0.0-alpha",
+    "touchportal-api": "^2.0.0-alpha1",
     "websocket": "^1.0.33"
   }
 }
