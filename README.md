@@ -20,13 +20,13 @@ Plugin for Touch Portal to interact with Stream Raiders
   - [SFX Audio Status](#sfx-audio-status)
   - [Music Audio Volume](#music-audio-volume)
   - [SFX Audio Volume](#sfx-audio-volume)
-- [Example Page](#example-page)
-  - [Dependencies](#dependencies)
-  - [Versioning](#versioning)
-  - [Authors](#authors)
-  - [License](#license)
-  - [Bugs/Enhancements](#bugsenhancements)
-  - [Acknowledgments](#acknowledgments)
+  - [Example Page](#example-page)
+- [Dependencies](#dependencies)
+- [Versioning](#versioning)
+- [Authors](#authors)
+- [License](#license)
+- [Bugs/Enhancements](#bugsenhancements)
+- [Acknowledgments](#acknowledgments)
 
 # Notice
 This plugin is NOT developed by Stream Captain and is not affiliated with them in any way. Support will be provided through github issues or through the #stream-raiders channel on the [Official Touch Portal Discord](https://discord.gg/MgxQb8r)
@@ -121,14 +121,14 @@ This plugin also could stop working on future updates to Stream Raiders or their
     Id: streamraiders_sfx_audio_volume
     Valid Values: 0 - 100
 
-# Example Page
+## Example Page
 I built an example page that can be used to get you started
 
 Download: [Touch Portal Stream Raiders Example Page](resources/streamraiders-example.tpz)
 <br> <br>
 ![Stream Raiders Example Page](resources/images/StreamRaiders-ExamplePage.gif)
 
-## Dependencies
+# Dependencies
 - [Stream Raiders](https://www.streamraiders.com/)
 - [touchportal-api](https://www.npmjs.com/package/touchportal-api)
 - [atob](https://www.npmjs.com/package/atob)
@@ -138,22 +138,22 @@ Download: [Touch Portal Stream Raiders Example Page](resources/streamraiders-exa
 - [qs](https://www.npmjs.com/package/qs)
 - [websocket](https://www.npmjs.com/package/websocket)
 
-## Versioning
+# Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/spdermn02/tpohm_plugin/tags).
 
-## Authors
+# Authors
 
 - **Jameson Allen** - _Initial work_ - [Spdermn02](https://github.com/spdermn02)
 
-## License
+# License
 
 This project is licensed under the MIT License- see the [LICENSE](LICENSE) file for details
 
-## Bugs/Enhancements
+# Bugs/Enhancements
 Use the Github Issues tab to report any bugs/enhancements for this plug-in. Or mention them in the Official Touch Portal discord channel #stream-raiders
 
-## Acknowledgments
+# Acknowledgments
 
 - Thank you to [Niterfx](https://www.twitch.tv/niterfx_) for inquiring about the plugin possiblities and coordinating communication to the Stream Captain team to make sure it was okay to build this plugin based on their Streamdeck plugin, and testing it!
 - Thank you to [Tempestwins](https://www.twitch.tv/tempestwins) for testing
