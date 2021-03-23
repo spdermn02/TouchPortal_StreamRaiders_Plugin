@@ -75,13 +75,23 @@ This plugin also could stop working on future updates to Stream Raiders or their
 # Actions
  ## Start Battle
  ![Start Battle](resources/images/StreamRaiders-StartBattle.gif)
+ 
+ If you want to stop allowing Units from being placed and prep for battle start, use this.
+ This will NOT actually kick the battle off, but it will prep to actually click the button in the Stream Raiders Game
  ## Toggle Music/SFX Audio
  ![Toggle Mute](resources/images/StreamRaiders-Mute.gif)
+ 
+ Be able to quickly mute/unmute the Music or SFX from Stream Raiders
 
  ## Increase/Decrease Music/SFX volume by or to a specified value
  ![Volume Change](resources/images/StreamRaiders-Volume.gif)
+
+ Be able to quickly increase/decrease the Music or SFX Volume from Stream Raiders by your defined amount
+
  ## Switch between Account Types - Captain or Viewer
  ![Account Type Change](resources/images/StreamRaiders-ChangeAccount.png)
+
+ If you want to quickly switch to a viewer account and back, you can use this action.
 
 # States
 ## Account Type
