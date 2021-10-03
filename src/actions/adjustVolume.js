@@ -15,7 +15,7 @@ module.exports = {
         setState(state,newVolume);
     },
     states: {
-        streamraiders_music_audio_volume: { value: 0, updated: false},
-        streamraiders_sfx_audio_volume: { value: 0, updated: false}
+        streamraiders_music_audio_volume: { value: 0, updated: false, connector: {id:'streamraiders_volume_connector', data:[{id: 'streamraiders_volume_type_connector', value: 'Music'} ]}},
+        streamraiders_sfx_audio_volume: { value: 0, updated: false, connector: {id:'streamraiders_volume_connector', data:[{id:'streamraiders_volume_type_connector', value:'SFX'} ]}}
     }
 }

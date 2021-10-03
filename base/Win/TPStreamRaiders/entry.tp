@@ -1,7 +1,7 @@
 {
-    "sdk": 3,
-    "version": 1000,
-    "TouchPortal_STreamRaiders_Version":"1.0.0",
+    "sdk": 4,
+    "version": 1100,
+    "TouchPortal_STreamRaiders_Version":"1.1.0",
     "name": "Touch Portal Stream Raiders Plugin",
     "id": "Touch Portal Stream Raiders",
     "plugin_start_cmd": "\"%TP_PLUGIN_FOLDER%TPStreamRaiders\\TouchPortal_StreamRaiders.exe\"",
@@ -15,6 +15,26 @@
             "id": "TouchPortalStreamRaiders",
             "name": "Stream Raiders",
             "imagepath": "%TP_PLUGIN_FOLDER%TPStreamRaiders/StreamRaiders-TouchPortal.png",
+            "connectors":[
+                {
+                    "id": "streamraiders_volume_connector",
+                    "prefix": "Stream Raiders:",
+                    "name":"Audio Volume",
+                    "format":"Stream Raiders: Control the {$streamraiders_volume_type_connector$} Volume",
+                    "data" :[
+                        {
+                            "id":"streamraiders_volume_type_connector",
+                            "type": "choice",
+                            "label":  "Volume Type",
+                            "default": "Music",
+                            "valueChoices":[
+                                "Music",
+                                "SFX"
+                            ]
+                        }
+                    ]
+                }
+            ],
             "actions": [
                 {
                     "id": "streamraiders_switch_accounts",

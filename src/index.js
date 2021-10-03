@@ -78,17 +78,24 @@ else {
   });
 }
 
-const updateTouchPortalStates = () => {
+const updateTouchPortalStates = (forceStateUpdate) => {
     let statesToUpdate = [];
+    let connectorsToUpdate = [];
     for( const state in states ) {
-        if( states[state].updated ) {
+        if( states[state].updated || forceStateUpdate ) {
             statesToUpdate.push({ id: state, value: states[state].value });
             states[state].updated = false;
+            if( states[state].connector !== undefined ) {
+                connectorsToUpdate.push({id:states[state].connector.id, value: states[state].value, data: states[state].connector.data});
+            }
         }
     }
 
     if( statesToUpdate.length > 0 ) {
       TPClient.stateUpdateMany( statesToUpdate );
+    }
+    if( connectorsToUpdate.length > 0 ) {
+      TPClient.connectorUpdateMany( connectorsToUpdate );
     }
 }
 
@@ -102,6 +109,13 @@ const setState = (state, value ) => {
     else {
         logIt("ERROR", 'attempted setState for',state,'but it is not defined');
     }
+}
+
+const getState = (state) => {
+    if( states[state] ) {
+        return states[state].value;
+    }
+    return null;
 }
 
 // Stream Raiders
@@ -136,7 +150,7 @@ SRServer.on("response",(data) => {
       resetTimer();
   }
 
-  updateTouchPortalStates();
+  updateTouchPortalStates(false);
 });
 
 calcTimer = () => {
@@ -145,7 +159,7 @@ calcTimer = () => {
    let seconds = Math.floor(timeLeft - minutes * 60);
    setState('streamraiders_battle_timer_seconds',String(seconds).padStart(2,"0"));
    setState('streamraiders_battle_timer_minutes',String(minutes).padStart(2,"0"));
-   updateTouchPortalStates();
+   updateTouchPortalStates(false);
 };
 
 resetTimer = () => {
@@ -167,6 +181,7 @@ SRClient.on("connected", () => {
     setState('streamraiders_connected',true);
 });
 SRClient.on("message", (message) => {
+    logIt('INFO','Message from SR ' + message);
     const pieces = message.split("|");
     if( pieces[0] == 'switchaccounts' ) {
         actions.get('streamraiders_switch_accounts').updateState(pieces,states,setState);
@@ -197,7 +212,7 @@ SRClient.on("message", (message) => {
 
     }
 
-    updateTouchPortalStates();
+    updateTouchPortalStates(false);
 });
 SRClient.on("error", (message) => {
     logIt('ERROR',JSON.stringify(message));
@@ -242,7 +257,7 @@ procWatcher.on('processTerminated', (processName) => {
     SRServer.disconnect();
     SRClient.disconnect();
     setState('streamraiders_connected',false);
-    updateTouchPortalStates();
+    updateTouchPortalStates(true);
 });
 // End Process Watcher
 
@@ -277,6 +292,42 @@ TPClient.on("Action", (message) => {
         logIt("ERROR",`Unknown action called ${action}`);
     }
 });
+TPClient.on("ConnectorChange",(message) => {
+    logIt('INFO',`Connector change event fired `+JSON.stringify(message));
+    // {"data":[{"id":"streamraiders_volume_type_connector","value":"Music"}],"pluginId":"Touch Portal Stream Raiders","connectorId":"streamraiders_volume_connector","type":"connectorChange","value":42}
+    const action = message.connectorId.replace('_connector','');
+    if( actions.has(action) ) {
+        logIt("INFO",`calling action ${action}`);
+        let data = {};
+        message.data.forEach((elm) => {
+            data[elm.id.replace('_connector','')] = elm.value;
+        });
+        if( action == 'streamraiders_volume' ) {
+            
+            if( data['streamraiders_volume_type'] == 'Music' ) {
+                const volDiff = parseInt(getState('streamraiders_music_audio_volume')) - parseInt(message.value);
+                data['streamraiders_volume_control'] = ( volDiff < 0 ) ? 'Increase' : 'Decrease';
+                data['streamraiders_volume_value'] = Math.abs(volDiff);
+            }
+            else {
+                logIt('INFO','State '+getState('streamraiders_sfx_audio_volume') + `message is ${message.value}`);
+                const volDiff = parseInt(getState('streamraiders_sfx_audio_volume')) - parseInt(message.value);
+                logIt('INFO','State '+getState('streamraiders_sfx_audio_volume') + `volDiff is ${volDiff}`);
+                data['streamraiders_volume_control'] = ( volDiff < 0 ) ? 'Increase' : 'Decrease';
+                data['streamraiders_volume_value'] = Math.abs(volDiff);            }
+        }
+        logIt("INFO",JSON.stringify(data));
+        actions.get(action).run(data,TPClient,SRClient,SRServer);
+    }
+    else {
+        logIt("ERROR",`Unknown action called ${action}`);
+    }
+
+});
+TPClient.on("Broadcast",(message) => {
+    logIt('INFO',`Broadcast event fired `+JSON.stringify(message));
+    updateTouchPortalStates(true);
+})
 
 function logIt() {
     var curTime = new Date().toISOString();
