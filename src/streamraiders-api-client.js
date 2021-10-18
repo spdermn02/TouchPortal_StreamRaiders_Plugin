@@ -14,10 +14,14 @@ class StreamRaidersClient extends EventEmitter {
         super();
         this.websocket = null;
         this.connection = null;
+        this.socket_ip =  SOCKET_IP;
+        this.socket_port = SOCKET_PORT;
         this.loop = null;
     }
     connect(options = {}) {
         let that = this;
+        this.socket_ip = (options["StreamRaiders IP"] !== undefined ) ? options["StreamRaiders IP"] : SOCKET_IP
+        this.socket_port = (options["StreamRaiders Port"] !== undefined ) ? options["StreamRaiders Port"] : SOCKET_PORT;
         this.websocket = new WebSocketClient();
         this.websocket.on("connect",(connection) => {
           that.connection = connection;
@@ -41,11 +45,14 @@ class StreamRaidersClient extends EventEmitter {
           that.sendMessage("getinfo");
           that.loopGetState();
         });
-        this.websocket.connect(`ws://${SOCKET_IP}:${SOCKET_PORT}`);
+        this.websocket.connect(`ws://${this.socket_ip}:${this.socket_port}`);
     }
     disconnect() {
       clearInterval(this.loop);
       this.loop = null;
+      if( this.connection !== undefined ) {
+        this.connection.close();
+      }
     }
     sendMessage( message ) {
       this.connection.sendUTF(btoa(message));
