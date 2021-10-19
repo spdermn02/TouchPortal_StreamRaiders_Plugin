@@ -1,7 +1,7 @@
 {
     "sdk": 4,
-    "version": 1100,
-    "TouchPortal_STreamRaiders_Version":"1.1.0",
+    "version": 2000,
+    "TouchPortal_STreamRaiders_Version":"2.0.0",
     "name": "Touch Portal Stream Raiders Plugin",
     "id": "Touch Portal Stream Raiders",
     "plugin_start_cmd": "\"%TP_PLUGIN_FOLDER%TPStreamRaiders\\TouchPortal_StreamRaiders.exe\"",
@@ -9,7 +9,20 @@
         "colorDark": "#023B2F",
         "colorLight": "#126352"
     },
-    "settings": [ ],
+    "settings": [ 
+        {
+            "name": "StreamRaiders IP",
+            "type": "text",
+            "default": "127.0.0.1",
+            "maxLength": 15
+        },
+        {
+            "name": "StreamRaiders Port",
+            "type": "text",
+            "default": "10042",
+            "maxLength": 5
+        }
+    ],
     "categories": [
         {
             "id": "TouchPortalStreamRaiders",

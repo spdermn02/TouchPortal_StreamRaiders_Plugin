@@ -42,7 +42,10 @@ const battleStateArray = [
     'UNKNOWN'
 ];
 
-const settings = { };
+const settings = {
+    'StreamRaiders IP' : undefined,
+    'StreamRaiders Port' : undefined
+};
 
 let states = {
     streamraiders_connected : { value: false, updated: false },
@@ -228,7 +231,7 @@ SRClient.on("close", () => {
     SRServer.disconnect();
     setTimeout(function() {
         logIt('WARN', "Attempting Reconnect to Stream Raiders");
-        SRClient.connect();
+        SRClient.connect(settings);
     }, 2000);
 });
 // End Stream Raiders
@@ -242,7 +245,7 @@ procWatcher.on('processRunning', (processName) => {
     SRClient.disconnect();
     setTimeout(function() {
         logIt('INFO', "Stream Raiders is running, attempting to Connect");
-        SRClient.connect();
+        SRClient.connect(settings);
         runningConnection = false;
     }, 5000);
 });
@@ -268,6 +271,7 @@ TPClient.on("Settings", (data) => {
       let key = Object.keys(setting)[0];
       settings[key] = setting[key];
     });
+    SRClient.disconnect();
   }
 });
 
