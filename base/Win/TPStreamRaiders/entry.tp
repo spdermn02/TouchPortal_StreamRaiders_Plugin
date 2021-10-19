@@ -9,20 +9,7 @@
         "colorDark": "#023B2F",
         "colorLight": "#126352"
     },
-    "settings": [ 
-        {
-            "name": "StreamRaiders IP",
-            "type": "text",
-            "default": "127.0.0.1",
-            "maxLength": 15
-        },
-        {
-            "name": "StreamRaiders Port",
-            "type": "text",
-            "default": "10042",
-            "maxLength": 5
-        }
-    ],
+    "settings": [ ],
     "categories": [
         {
             "id": "TouchPortalStreamRaiders",
