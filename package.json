@@ -1,6 +1,6 @@
 {
   "name": "touchportal_streamraiders",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Touch Portal and Stream Raiders control",
   "bin": "src/index.js",
   "main": "src/index.js",
