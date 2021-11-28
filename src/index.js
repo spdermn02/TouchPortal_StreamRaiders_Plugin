@@ -238,8 +238,10 @@ procWatcher.on('processRunning', (processName) => {
     runningConnection = true;
     streamRaidersRunning = true;
     // Lets shutdown the connection so we can re-establish it
-    SRServer.disconnect();
-    SRClient.disconnect();
+    if( SRServer.connection !== null ) {
+        SRServer.disconnect();
+        SRClient.disconnect();
+    }
     setTimeout(function() {
         logIt('INFO', "Stream Raiders is running, attempting to Connect");
         SRClient.connect();

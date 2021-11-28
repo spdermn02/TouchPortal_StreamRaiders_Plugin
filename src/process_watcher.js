@@ -4,7 +4,7 @@ const EventEmitter = require("events")
 const find  = require('find-process');
 const path = require('path');
 const platform = require('process').platform;
-const LOOP_INTERVAL = 10000;
+const LOOP_INTERVAL = 1000;
 
 class ProcessReady extends EventEmitter {
     constructor(options = {}) {
